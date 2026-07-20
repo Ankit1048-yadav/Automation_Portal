@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ report_name }}</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 500px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="file"],
+        input[type="number"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 15px 0;
+            border: 1px solid #6ba1f1;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0b5ed7;
+        }
+
+        .alert-error{
+            background:#fff3cd;
+            color:#856404;
+            padding:14px 18px;
+            border-left:5px solid #ffc107;
+            border-radius:8px;
+            margin:15px auto;
+            font-weight:500;
+            text-align:center;
+            width:90%;
+            max-width:450px;
+            display:block;
+            box-shadow:0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .loader {
+            display: none;
+            margin-top: 15px;
+            color: #0d6efd;
+            font-weight: bold;
+            text-align: center;
+        }
+                /* Loading Overlay */
+
+        #loadingOverlay{
+
+            display:none;
+
+            position:fixed;
+
+            top:0;
+            left:0;
+
+            width:100%;
+            height:100%;
+
+            background:rgba(0,0,0,.35);
+
+            z-index:9999;
+
+            justify-content:center;
+            align-items:center;
+
+        }
+
+        .loading-box{
+
+            background:white;
+
+            padding:30px;
+
+            border-radius:10px;
+
+            text-align:center;
+
+            width:320px;
+
+            box-shadow:0 5px 20px rgba(0,0,0,.2);
+
+        }
+
+        .spinner{
+
+            width:45px;
+            height:45px;
+
+            border:5px solid #ddd;
+
+            border-top:5px solid #0d6efd;
+
+            border-radius:50%;
+
+            margin:auto;
+
+            animation:spin 1s linear infinite;
+
+        }
+
+        @keyframes spin{
+
+            100%{
+                transform:rotate(360deg);
+            }
+
+        }
+
+        /* Toast */
+
+        .toast{
+
+            display:none;
+
+            position:fixed;
+
+            top:20px;
+            right:20px;
+
+            padding:14px 22px;
+
+            color:white;
+
+            border-radius:8px;
+
+            font-weight:bold;
+
+            z-index:10000;
+
+            box-shadow:0 3px 10px rgba(0,0,0,.2);
+
+        }
+
+        .success{
+
+            background:#28a745;
+
+        }
+
+        .error{
+
+            background:#dc3545;
+
+        }
+            
+    </style>
+</head>
+
+<body>
+<!-- Loading Overlay -->
+<div id="loadingOverlay">
+    <div class="loading-box">
+        <div class="spinner"></div>
+
+        <h3>Generating Report...</h3>
+
+        <p>Please wait...</p>
+    </div>
+</div>
+
+<!-- Success Toast -->
+<div id="successToast" class="toast success">
+    ✅ Report Generated Successfully
+</div>
+
+<!-- Error Toast -->
+<div id="errorToast" class="toast error">
+    ❌ Something went wrong
+</div>
+<div class="container">
+
+    <h2>{{ report_name }}</h2>
+
+    {% if error %}
+        <div class="alert-error">
+            ⚠ {{ error }}</div>
+    {% endif %}
+
+    <form id="reportForm" action="/generate/{{ report_id }}" method="post" enctype="multipart/form-data"> 
+    {% if report_id == "document_scanner" %} 
+        <label>Select Images</label> 
+        <input type="file" name="files" accept=".jpg,.jpeg,.png,.bmp,.tif,.tiff" multiple required > 
+        <p style="font-size:13px;color:gray;"> You can select multiple images. </p> 
+        <button type="submit"> Generate PDF </button> 
+    {% elif report_id == "axis_whatsapp" %} 
+        <label>Select File</label> 
+        <input type="file" name="file" required> 
+        <label>Password</label> <input type="password" name="password" required> 
+        <button type="submit"> Generate WhatsApp Message </button> 
+    {% else %} 
+        {% if report_id == "axis_bucket"
+            or report_id == "bob_dpr" %} 
+            <label>Select Files</label> 
+            <p style="font-size:13px;color:gray;"> You can select multiple files. </p>
+            <input type="file" name="files" multiple required> 
+            <label>Month</label> 
+            <input type="number" name="month" min="1" max="12" required> 
+            <label>Year</label> 
+            <input type="number" name="year" required> 
+        {% else %} 
+            <label>Select File</label> 
+            <input type="file" name="file" required>
+            {% if report_id == "separate_portfolio" %}
+            <div style="margin-top:10px;margin-bottom:15px;">
+                <input
+                    type="checkbox"
+                    id="separate_files"
+                    name="separate_files"
+                    value="yes"
+                >
+
+                <label for="separate_files">
+                    Generate Separate Excel Files
+                </label>
+            </div>
+            {% endif %}
+        {% endif %}
+            {% if report_id not in ["cmd_clean","document_scanner","separate_portfolio","payment_dump_clean"] %}
+            <label>Password</label> 
+            <input 
+                type="password" 
+                name="password" 
+                placeholder="Enter Password" 
+                required > 
+            {% endif %}
+             
+            <button type="submit"> 
+                Generate Report 
+
+            </button> 
+        {% endif %} 
+            <div id="loader" class="loader"> ⏳ Please wait... Report is being generated. 
+
+            </div> 
+    </form>
+
+    {% if message %}
+        <br><hr>
+        <h3>Generated WhatsApp Message</h3>
+
+        <textarea rows="15" style="width:100%;" readonly>{{ message }}</textarea>
+
+        <br><br>
+
+        <button onclick="copyText()">Copy Message</button>
+
+        <script>
+        function copyText() {
+            let text = document.querySelector("textarea");
+            text.select();
+            document.execCommand("copy");
+            alert("Copied!");
+        }
+        </script>
+    {% endif %}
+
+    <br>
+    <a href="/">⬅ Back to Dashboard</a>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("reportForm");
+
+    if (form) {
+
+        form.addEventListener("submit", function () {
+
+            document.getElementById("loadingOverlay").style.display = "flex";
+
+            // fallback auto-hide
+            setTimeout(() => {
+                document.getElementById("loadingOverlay").style.display = "none";
+            }, 3000);
+
+        });
+
+    }
+
+});
+</script>
+
+<script>
+let inactivityTime = function () {
+    let timer;
+
+    function resetTimer() {
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            window.location.href = "/logout";
+        }, 30 * 60 * 1000);
+    }
+
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeydown = resetTimer;
+    document.onclick = resetTimer;
+    document.onscroll = resetTimer;
+};
+
+inactivityTime();
+</script>
+
+</body>
+</html>

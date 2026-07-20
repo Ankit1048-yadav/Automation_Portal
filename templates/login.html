@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login | Automation Report Portal</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+
+    background:#f4f6f9;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+
+}
+
+.login-box{
+
+    width:400px;
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:8px;
+
+    box-shadow:0 3px 12px rgba(0,0,0,0.12);
+
+}
+
+.logo{
+
+    text-align:center;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#1f3c88;
+
+    margin-bottom:8px;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:30px;
+
+    font-size:14px;
+
+}
+
+label{
+
+    font-weight:bold;
+
+    color:#444;
+
+}
+
+input{
+
+    width:100%;
+
+    padding:10px;
+
+    margin-top:8px;
+
+    margin-bottom:18px;
+
+    border:1px solid #cfcfcf;
+
+    border-radius:4px;
+
+    font-size:14px;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#0d6efd;
+
+    color:white;
+
+    border:none;
+
+    border-radius:4px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#0b5ed7;
+
+}
+
+.error{
+
+    margin-top:15px;
+
+    text-align:center;
+
+    color:red;
+
+    font-size:14px;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    color:gray;
+
+    font-size:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<div class="logo">
+
+Automation Report Portal
+
+</div>
+
+<div class="subtitle">
+
+Creditas Solutions Pvt. Ltd.
+
+</div>
+
+<form method="POST">
+
+<label>
+
+Username
+
+</label>
+
+<input
+type="text"
+name="username"
+placeholder="Enter Username"
+required>
+
+<label>
+
+Password
+
+</label>
+
+<input
+type="password"
+name="password"
+placeholder="Enter Password"
+required>
+
+<button type="submit">
+
+Login
+
+</button>
+
+</form>
+
+{% if error %}
+
+<div class="error">
+
+{{ error }}
+
+</div>
+
+{% endif %}
+
+<div class="footer">
+
+© 2026 Creditas Solutions Pvt. Ltd.<br>
+
+Authorized Users Only
+
+</div>
+
+</div>
+
+</body>
+
+</html>

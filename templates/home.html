@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation Report Portal</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Header */
+
+.header{
+
+    background:#1f3c88;
+    color:white;
+
+    padding:18px 40px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+}
+
+.logo{
+
+    font-size:24px;
+    font-weight:bold;
+
+}
+
+.right{
+
+    display:flex;
+    align-items:center;
+    gap:20px;
+
+}
+
+.logout{
+
+    text-decoration:none;
+    background:white;
+    color:#1f3c88;
+
+    padding:8px 18px;
+
+    border-radius:5px;
+
+    font-weight:bold;
+
+}
+
+.logout:hover{
+
+    background:#e9ecef;
+
+}
+
+/* Title */
+
+.title{
+
+    text-align:center;
+
+    margin:35px 0 25px 0;
+
+}
+
+.title h2{
+
+    color:#333;
+
+}
+
+.title p{
+
+    color:#666;
+
+    margin-top:5px;
+
+}
+
+/* Table */
+
+.container{
+
+    width:80%;
+    margin:auto;
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+    background:white;
+
+    box-shadow:0 2px 8px rgba(248, 245, 245, 0.08);
+
+}
+
+th{
+
+    background:#90c2db;
+
+    text-align:left;
+
+    padding:14px;
+
+    font-size:16px;
+
+}
+
+td{
+
+    padding:15px;
+
+    border-top:1px solid #9296b7;
+
+}
+
+tr:hover{
+
+    background:#fafafa;
+
+}
+
+.btn{
+
+    text-decoration:none;
+
+    background:#0b63e8;
+
+    color:rgb(245, 237, 237);
+
+    padding:8px 16px;
+
+    border-radius:4px;
+
+    font-size:14px;
+
+}
+
+.btn:hover{
+
+    background:#8c96ef;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:40px;
+
+    color:#777;
+
+    padding:20px;
+
+    font-size:14px;
+
+}
+/* Search Box */
+
+.search-box{
+
+    width:30%;
+    margin:20px auto 30px auto;
+
+}
+
+.search-wrapper{
+
+    position:relative;
+    width:100%;
+
+}
+
+.search-icon{
+
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+    color:#888888;
+
+}
+
+.search-wrapper input{
+
+    width:100%;
+    padding:12px 15px 12px 45px;
+
+    border:1px solid #f3f4f5;
+    border-radius:30px;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:0.3s;
+
+    background:white;
+
+}
+
+.search-wrapper input:focus{
+
+    border-color:#0d6efd;
+
+    box-shadow:0 0 8px rgba(13,110,253,0.25);
+
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="logo">
+
+Automation Report Portal
+
+</div>
+
+<div class="right">
+
+<div>
+
+Welcome,
+<b>{{ username }}</b>
+
+</div>
+
+<a href="/logout" class="logout">
+
+Logout
+
+</a>
+
+</div>
+
+</div>
+
+<div class="title">
+
+<h2>Report Dashboard</h2>
+
+<p>Select a report to generate</p>
+
+</div>
+<div class="search-box">
+
+    <div class="search-wrapper">
+
+        <span class="search-icon">🔍</span>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search Report..."
+            onkeyup="searchReport()">
+
+    </div>
+
+</div>
+
+<div class="container">
+
+<table>
+
+<tr>
+
+<th width="80%">Report Name</th>
+
+<th>Action</th>
+
+</tr>
+
+{% for key,value in reports.items() %}
+
+<tr>
+
+<td>
+
+{{ value }}
+
+</td>
+
+<td>
+
+<a href="/report/{{key}}" class="btn">
+
+Open Report
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+<div class="footer">
+
+© 2026 Automation Report Portal | Creditas Solutions Pvt. Ltd.
+
+</div>
+<script>
+let inactivityTime = function () {
+    let timer;
+
+    function resetTimer() {
+        clearTimeout(timer);
+
+        timer = setTimeout(() => {
+            window.location.href = "/logout";
+        }, 30 * 60 * 1000); // 30 min
+    }
+
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onkeydown = resetTimer;
+    document.onclick = resetTimer;
+    document.onscroll = resetTimer;
+};
+
+inactivityTime();
+</script>
+<script>
+
+function searchReport(){
+
+    let input = document.getElementById("searchInput");
+
+    let filter = input.value.toUpperCase();
+
+    let table = document.querySelector("table");
+
+    let rows = table.getElementsByTagName("tr");
+
+    for(let i=1;i<rows.length;i++){
+
+        let td = rows[i].getElementsByTagName("td")[0];
+
+        if(td){
+
+            let txt = td.textContent || td.innerText;
+
+            if(txt.toUpperCase().indexOf(filter)>-1){
+
+                rows[i].style.display="";
+
+            }
+
+            else{
+
+                rows[i].style.display="none";
+
+            }
+
+        }
+
+    }
+
+}
+
+</script>
+</body>
+</html>
