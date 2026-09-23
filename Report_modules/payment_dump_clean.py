@@ -42,7 +42,8 @@ def generate_payment_dump(input_file, output_file):
         "LivePayment",
         "PaymentMode",
         "Resolution",
-        "TransactionNo"
+        "TransactionNo",
+        "paymentUploadBy"
     ]
 
     final_columns = [
