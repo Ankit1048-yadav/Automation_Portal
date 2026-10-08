@@ -43,7 +43,8 @@ def generate_payment_dump(input_file, output_file):
         "PaymentMode",
         "Resolution",
         "TransactionNo",
-        "paymentUploadBy"
+        "paymentUploadBy",
+        "paymentuploadempid"
     ]
 
     final_columns = [
