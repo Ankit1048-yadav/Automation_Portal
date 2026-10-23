@@ -120,12 +120,12 @@ def generate_separate_portfolio(input_file, output_file,separate_files=False):
             ] = col
 
         # =====================
-        # X = V + W
+        # Y = W + X
         # =====================
         if max_col >= 24:
 
             for row in range(2, max_row + 1):
-                ws[f"X{row}"] = f"=V{row}+W{row}"
+                ws[f"Y{row}"] = f"=W{row}+X{row}"
 
         # =====================
         # VARIANCE FORMULA
